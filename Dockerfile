@@ -2,8 +2,12 @@
 FROM oven/bun:1.3.13 AS web-build
 
 WORKDIR /app/web
+ARG VITE_BASE=/
+ENV VITE_BASE=${VITE_BASE}
+ARG VITE_API_BASE_URL=https://api.openai.com
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 COPY web/package.json web/bun.lock ./
-RUN --mount=type=cache,target=/root/.bun/install/cache bun install --cache-dir=/root/.bun/install/cache
+RUN --mount=type=cache,target=/root/.bun/install/cache bun install --frozen-lockfile --cache-dir=/root/.bun/install/cache
 COPY VERSION /app/VERSION
 COPY CHANGELOG.md /app/CHANGELOG.md
 COPY web ./
